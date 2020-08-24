@@ -20,7 +20,19 @@ include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
 #### GUDHI Alpha complex requires CGAL >= 4.7.0 ####
-find_package(CGAL 4.7.0 REQUIRED)
+find_package(CGAL QUIET)
+
+# Requires CGAL versions > 4.11
+if (NOT CGAL_FOUND)
+  message(FATAL_ERROR "++ CGAL is required for this example.")
+endif()
+
+message("++ CGAL Version is ${CGAL_VERSION}")
+
+if (CGAL_VERSION VERSION_LESS 4.11.0)
+  message(FATAL_ERROR "++ Your CGAL is considered too old to be used by Gudhi. Must be > 4.11.")
+endif()
+
 include( ${CGAL_USE_FILE} )
 
 #### Optional GMP and GMPXX for CGAL ####
